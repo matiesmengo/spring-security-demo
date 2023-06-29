@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>OAuth2 Client Permissions</title>
+</head>
+<body>
+<h1>OAuth2 Client Permissions</h1>
+<div width="100%">
+    <button onclick="setRole('ADMIN')">Set Admin</button>
+    <button onclick="setRole('ROLE_READER')">Set Role Reader</button>
+</div>
+<br>
+<div width="100%">
+    <button onclick="getPermissions()">Obtener Permisos</button>
+    <ul id="permissionsList"></ul>
+</div>
+<br>
+<h1>OAuth2 Test</h1>
+
+<div width="100%">
+    <button onclick="testAdmin()">Call ADMIN</button>
+    <button onclick="testReader()">Call READER</button>
+    <button onclick="testResourceServer()">Call ResourceServer</button>
+    <br>
+    <div id="textResult"></div>
+</div>
+
+<script>
+        function getPermissions() {
+            fetch("http://localhost:8080/authorization")
+                .then(response => response.json())
+                .then(data => displayPermissions(data))
+                .catch(error => console.error("Error al obtener los permisos:", error));
+        }
+
+        function setRole(role) {
+            fetch("http://localhost:8080/authorization/" + role)
+                .then(response => getPermissions())
+                .catch(error => console.error("Error al obtener los permisos:", error));
+        }
+
+        function testAdmin() {
+            fetch("http://localhost:8080/admin")
+                .then(response => { response.status === 403 ? textResult('Admin error') : textResult('Admin ok')})
+                .catch(error => textResult('error'));
+        }
+
+        function testReader() {
+            fetch("http://localhost:8080/reader")
+                .then(response => { response.status === 403 ? textResult('Reader error') : textResult('Reader ok')})
+                .catch(error => textResult('error'));
+        }
+
+        function testResourceServer() {
+            fetch("http://localhost:8080/redirect/resource/server")
+                .then(response => { response.status === 403 ? textResult('ResourceServer error') : textResult('ResourceServer ok')})
+                .catch(error => textResult('error'));
+        }
+
+        function displayPermissions(permissions) {
+            const permissionsList = document.getElementById("permissionsList");
+            permissionsList.innerHTML = "";
+
+            permissions.forEach(permission => {
+                const listItem = document.createElement("li");
+                listItem.textContent = permission;
+                permissionsList.appendChild(listItem);
+            });
+        }
+
+        function textResult(response) {
+            const result = document.getElementById("textResult");
+            result.textContent = response;
+        }
+
+
+
+</script>
+</body>
+</html>
