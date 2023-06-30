@@ -7,8 +7,8 @@ spring:
       client:
         registration:
           google:
-            client-id: 281265839632-d7i4f968kpeos768dtl5n9fqlf1rmkqd.apps.googleusercontent.com
-            client-secret: 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
+            client-id: xxxxxxxxxxxxxxxxxxxxxxx.apps.googleusercontent.com
+            client-secret: yyyyyyyyyyyyyyyyyyyyyyyyyyy
             authorization-grant-type: authorization_code
         provider:
           google:
